@@ -1,8 +1,10 @@
 # YSLDraggingCardContainer
 
 ## Demo
+#### Dragging Animation
 ![Dome](https://raw.githubusercontent.com/y-hryk/YSLDraggingCardContainer/master/sample1.gif)
 ![Dome](https://raw.githubusercontent.com/y-hryk/YSLDraggingCardContainer/master/sample2.gif)
+#### Cancel Animation
 ![Dome](https://raw.githubusercontent.com/y-hryk/YSLDraggingCardContainer/master/sample3.gif)
 ## Requirement
 not support landscape
