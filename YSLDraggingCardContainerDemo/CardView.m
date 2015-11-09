@@ -52,22 +52,17 @@
     maskLayer.path = maskPath.CGPath;
     _imageView.layer.mask = maskLayer;
     
+    _selectedView = [[UIView alloc]init];
+    _selectedView.frame = _imageView.frame;
+    _selectedView.backgroundColor = [UIColor clearColor];
+    _selectedView.alpha = 0.0;
+    [_imageView addSubview:_selectedView];
+    
     _label = [[UILabel alloc]init];
     _label.backgroundColor = [UIColor clearColor];
     _label.frame = CGRectMake(10, self.frame.size.height * 0.8, self.frame.size.width - 20, self.frame.size.height * 0.2);
     _label.font = [UIFont fontWithName:@"Futura-Medium" size:14];
     [self addSubview:_label];
-}
-
-- (void)layoutSubviews
-{
-//    if (_imageView) {
-//        _imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height * 0.8);
-//    }
-//    
-//    if (_label) {
-//        _label.frame = CGRectMake(10, self.frame.size.height * 0.8, self.frame.size.width - 20, self.frame.size.height * 0.2);
-//    }
 }
 
 @end
