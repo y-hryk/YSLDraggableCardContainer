@@ -7,14 +7,14 @@
 //
 
 #import "ViewController.h"
-#import "YSLDraggingCardContainer.h"
+#import "YSLDraggableCardContainer.h"
 #import "CardView.h"
 
 #define RGB(r, g, b)	 [UIColor colorWithRed: (r) / 255.0 green: (g) / 255.0 blue: (b) / 255.0 alpha : 1]
 
-@interface ViewController () <YSLDraggingCardContainerDelegate, YSLDraggingCardContainerDataSource>
+@interface ViewController () <YSLDraggableCardContainerDelegate, YSLDraggableCardContainerDataSource>
 
-@property (nonatomic, strong) YSLDraggingCardContainer *container;
+@property (nonatomic, strong) YSLDraggableCardContainer *container;
 @property (nonatomic, strong) NSMutableArray *datas;
 
 @end
@@ -32,12 +32,12 @@
     
     self.view.backgroundColor = RGB(235, 235, 235);
     
-    _container = [[YSLDraggingCardContainer alloc]init];
+    _container = [[YSLDraggableCardContainer alloc]init];
     _container.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     _container.backgroundColor = [UIColor clearColor];
     _container.dataSource = self;
     _container.delegate = self;
-    _container.canDraggingDirection = YSLDraggingDirectionLeft | YSLDraggingDirectionRight | YSLDraggingDirectionTop;
+    _container.canDraggableDirection = YSLDraggableDirectionLeft | YSLDraggableDirectionRight | YSLDraggableDirectionUp;
     [self.view addSubview:_container];
     
     [_container reloadCardContainer];
@@ -85,21 +85,21 @@
 - (void)buttonTap:(UIButton *)button
 {
     if (button.tag == 0) {
-        [_container movePositionWithDirection:YSLDraggingDirectionTop isAutomatic:YES];
+        [_container movePositionWithDirection:YSLDraggableDirectionUp isAutomatic:YES];
     }
     if (button.tag == 1) {
         __weak ViewController *weakself = self;
-        [_container movePositionWithDirection:YSLDraggingDirectionBottom isAutomatic:YES resetHandler:^{
+        [_container movePositionWithDirection:YSLDraggableDirectionDown isAutomatic:YES resetHandler:^{
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@""
                                                                                      message:@"Do you want to reset?"
                                                                               preferredStyle:UIAlertControllerStyleAlert];
             
             [alertController addAction:[UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [weakself.container movePositionWithDirection:YSLDraggingDirectionBottom isAutomatic:YES];
+                [weakself.container movePositionWithDirection:YSLDraggableDirectionDown isAutomatic:YES];
             }]];
             
             [alertController addAction:[UIAlertAction actionWithTitle:@"YES" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                [weakself.container movePositionWithDirection:YSLDraggingDirectionDefault isAutomatic:YES];
+                [weakself.container movePositionWithDirection:YSLDraggableDirectionDefault isAutomatic:YES];
             }]];
             
             [self presentViewController:alertController animated:YES completion:nil];
@@ -107,10 +107,10 @@
 
     }
     if (button.tag == 2) {
-        [_container movePositionWithDirection:YSLDraggingDirectionLeft isAutomatic:YES];
+        [_container movePositionWithDirection:YSLDraggableDirectionLeft isAutomatic:YES];
     }
     if (button.tag == 3) {
-        [_container movePositionWithDirection:YSLDraggingDirectionRight isAutomatic:YES];
+        [_container movePositionWithDirection:YSLDraggableDirectionRight isAutomatic:YES];
     }
 }
 
@@ -132,56 +132,56 @@
 
 #pragma mark -- YSLSwipeingViewContainer Delegate
 
-- (void)cardContainerView:(YSLDraggingCardContainer *)cardContainerView didEndDraggingAtIndex:(NSInteger)index draggingView:(UIView *)draggingView draggingDirection:(YSLDraggingDirection)draggingDirection
+- (void)cardContainerView:(YSLDraggableCardContainer *)cardContainerView didEndDraggingAtIndex:(NSInteger)index draggableView:(UIView *)draggableView draggableDirection:(YSLDraggableDirection)draggableDirection
 {
-    if (draggingDirection == YSLDraggingDirectionLeft) {
-        [cardContainerView movePositionWithDirection:draggingDirection
+    if (draggableDirection == YSLDraggableDirectionLeft) {
+        [cardContainerView movePositionWithDirection:draggableDirection
                                          isAutomatic:NO];
     }
     
-    if (draggingDirection == YSLDraggingDirectionRight) {
-        [cardContainerView movePositionWithDirection:draggingDirection
+    if (draggableDirection == YSLDraggableDirectionRight) {
+        [cardContainerView movePositionWithDirection:draggableDirection
                                          isAutomatic:NO];
     }
     
-    if (draggingDirection == YSLDraggingDirectionTop) {
-        [cardContainerView movePositionWithDirection:draggingDirection
+    if (draggableDirection == YSLDraggableDirectionUp) {
+        [cardContainerView movePositionWithDirection:draggableDirection
                                          isAutomatic:NO];
     }
 }
 
-- (void)cardContainderView:(YSLDraggingCardContainer *)cardContainderView updatePositionWithDraggingView:(UIView *)draggingView draggingDirection:(YSLDraggingDirection)draggingDirection widthDiff:(CGFloat)widthDiff heightDiff:(CGFloat)heightDiff
+- (void)cardContainderView:(YSLDraggableCardContainer *)cardContainderView updatePositionWithDraggableView:(UIView *)draggableView draggableDirection:(YSLDraggableDirection)draggableDirection widthDiff:(CGFloat)widthDiff heightDiff:(CGFloat)heightDiff
 {
-    CardView *view = (CardView *)draggingView;
+    CardView *view = (CardView *)draggableView;
     
-    if (draggingDirection == YSLDraggingDirectionDefault) {
+    if (draggableDirection == YSLDraggableDirectionDefault) {
         view.selectedView.alpha = 0;
     }
     
-    if (draggingDirection == YSLDraggingDirectionLeft) {
+    if (draggableDirection == YSLDraggableDirectionLeft) {
         view.selectedView.backgroundColor = RGB(215, 104, 91);
         view.selectedView.alpha = widthDiff > 0.8 ? 0.8 : widthDiff;
     }
     
-    if (draggingDirection == YSLDraggingDirectionRight) {
+    if (draggableDirection == YSLDraggableDirectionRight) {
         view.selectedView.backgroundColor = RGB(114, 209, 142);
         view.selectedView.alpha = widthDiff > 0.8 ? 0.8 : widthDiff;
     }
     
-    if (draggingDirection == YSLDraggingDirectionTop) {
+    if (draggableDirection == YSLDraggableDirectionUp) {
         view.selectedView.backgroundColor = RGB(66, 172, 225);
         view.selectedView.alpha = heightDiff > 0.8 ? 0.8 : heightDiff;
     }
 }
 
-- (void)cardContainerViewDidCompleteAll:(YSLDraggingCardContainer *)container;
+- (void)cardContainerViewDidCompleteAll:(YSLDraggableCardContainer *)container;
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [container reloadCardContainer];
     });
 }
 
-- (void)cardContainerView:(YSLDraggingCardContainer *)cardContainerView didSelectAtIndex:(NSInteger)index draggingView:(UIView *)draggingView
+- (void)cardContainerView:(YSLDraggableCardContainer *)cardContainerView didSelectAtIndex:(NSInteger)index draggableView:(UIView *)draggableView
 {
     NSLog(@"++ index : %ld",(long)index);
 }

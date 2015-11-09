@@ -1,12 +1,12 @@
 //
-//  YSLDraggingCardContainer.m
+//  YSLDraggableCardContainer.m
 //  Crew-iOS
 //
 //  Created by yamaguchi on 2015/10/22.
 //  Copyright © 2015年 h.yamaguchi. All rights reserved.
 //
 
-#import "YSLDraggingCardContainer.h"
+#import "YSLDraggableCardContainer.h"
 
 static const CGFloat kPreloadViewCount = 3.0f;
 static const CGFloat kSecondCard_Scale = 0.98f;
@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
     MoveSlopeBottom = -1
 };
 
-@interface YSLDraggingCardContainer ()
+@interface YSLDraggableCardContainer ()
 
 @property (nonatomic, assign) MoveSlope moveSlope;
 @property (nonatomic, assign) CGRect defaultFrame;
@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
 
 @end
 
-@implementation YSLDraggingCardContainer
+@implementation YSLDraggableCardContainer
 
 - (id)init
 {
@@ -43,7 +43,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cardViewTap:)];
         [self addGestureRecognizer:tapGesture];
         
-        _canDraggingDirection = YSLDraggingDirectionLeft | YSLDraggingDirectionLeft;
+        _canDraggableDirection = YSLDraggableDirectionLeft | YSLDraggableDirectionLeft;
     }
     return self;
 }
@@ -71,12 +71,12 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
     [self viewInitialAnimation];
 }
 
-- (void)movePositionWithDirection:(YSLDraggingDirection)direction isAutomatic:(BOOL)isAutomatic resetHandler:(void (^)())resetHandler
+- (void)movePositionWithDirection:(YSLDraggableDirection)direction isAutomatic:(BOOL)isAutomatic resetHandler:(void (^)())resetHandler
 {
     [self cardViewDirectionAnimation:direction isAutomatic:isAutomatic resetHandler:resetHandler];
 }
 
-- (void)movePositionWithDirection:(YSLDraggingDirection)direction isAutomatic:(BOOL)isAutomatic
+- (void)movePositionWithDirection:(YSLDraggableDirection)direction isAutomatic:(BOOL)isAutomatic
 {
     [self cardViewDirectionAnimation:direction isAutomatic:isAutomatic resetHandler:nil];
 }
@@ -93,7 +93,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(cardContainerViewNumberOfViewInIndex:)]) {
         NSInteger index = [self.dataSource cardContainerViewNumberOfViewInIndex:_loadedIndex];
         
-        // all cardViews Dragging end
+        // all cardViews Draggable end
         if (index == _currentIndex) {
             if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainerViewDidCompleteAll:)]) {
                 [self.delegate cardContainerViewDidCompleteAll:self];
@@ -141,14 +141,14 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
         }
     }
 }
-- (void)cardViewDirectionAnimation:(YSLDraggingDirection)direction isAutomatic:(BOOL)isAutomatic resetHandler:(void (^)())resetHandler
+- (void)cardViewDirectionAnimation:(YSLDraggableDirection)direction isAutomatic:(BOOL)isAutomatic resetHandler:(void (^)())resetHandler
 {
     if (!_isInitialAnimation) { return; }
     UIView *view = [self getCurrentView];
     if (!view) { return; }
     
-    __weak YSLDraggingCardContainer *weakself = self;
-    if (direction == YSLDraggingDirectionDefault) {
+    __weak YSLDraggableCardContainer *weakself = self;
+    if (direction == YSLDraggableDirectionDefault) {
         view.transform = CGAffineTransformIdentity;
         [UIView animateWithDuration:0.55
                               delay:0.0
@@ -171,14 +171,14 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
         [self loadNextView];
     }
     
-    if (direction == YSLDraggingDirectionRight || direction == YSLDraggingDirectionLeft || direction == YSLDraggingDirectionBottom) {
+    if (direction == YSLDraggableDirectionRight || direction == YSLDraggableDirectionLeft || direction == YSLDraggableDirectionDown) {
         
         [UIView animateWithDuration:0.35
                               delay:0.0
                             options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
                          animations:^{
                              
-                             if (direction == YSLDraggingDirectionLeft) {
+                             if (direction == YSLDraggableDirectionLeft) {
                                  view.center = CGPointMake(-1 * (weakself.frame.size.width), view.center.y);
                                  
                                  if (isAutomatic) {
@@ -186,7 +186,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
                                  }
                              }
                              
-                             if (direction == YSLDraggingDirectionRight) {
+                             if (direction == YSLDraggableDirectionRight) {
                                  view.center = CGPointMake((weakself.frame.size.width * 2), view.center.y);
                                  
                                  if (isAutomatic) {
@@ -194,7 +194,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
                                  }
                              }
                              
-                             if (direction == YSLDraggingDirectionBottom) {
+                             if (direction == YSLDraggableDirectionDown) {
                                  view.center = CGPointMake(view.center.x, (weakself.frame.size.height * 1.5));
                              }
                              
@@ -210,13 +210,13 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
                          }];
     }
     
-    if (direction == YSLDraggingDirectionTop) {
+    if (direction == YSLDraggableDirectionUp) {
         [UIView animateWithDuration:0.15
                               delay:0.0
                             options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
                          animations:^{
                              
-                             if (direction == YSLDraggingDirectionTop) {
+                             if (direction == YSLDraggableDirectionUp) {
                                  if (isAutomatic) {
                                      view.transform = CGAffineTransformScale(CGAffineTransformIdentity,1.03,0.97);
                                      view.center = CGPointMake(view.center.x, view.center.y + kCard_Margin);
@@ -277,10 +277,10 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
 
 - (void)cardViewDefaultScale
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainderView:updatePositionWithDraggingView:draggingDirection:widthDiff:heightDiff:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainderView:updatePositionWithDraggableView:draggableDirection:widthDiff:heightDiff:)]) {
         
-        [self.delegate cardContainderView:self updatePositionWithDraggingView:[self getCurrentView]
-                        draggingDirection:YSLDraggingDirectionDefault
+        [self.delegate cardContainderView:self updatePositionWithDraggableView:[self getCurrentView]
+                        draggableDirection:YSLDraggableDirectionDefault
                                 widthDiff:0 heightDiff:0];
     }
 
@@ -311,7 +311,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
     
     UIView *view = [self getCurrentView];
     if (!view) { return; }
-    __weak YSLDraggingCardContainer *weakself = self;
+    __weak YSLDraggableCardContainer *weakself = self;
     view.alpha = 1.0;
     view.transform = CGAffineTransformScale(CGAffineTransformIdentity,0.5f,0.5f);
     [UIView animateWithDuration:0.1
@@ -382,53 +382,53 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
         
         [self cardViewUpDateScale];
         
-        if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainderView:updatePositionWithDraggingView:draggingDirection:widthDiff:heightDiff:)]) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainderView:updatePositionWithDraggableView:draggableDirection:widthDiff:heightDiff:)]) {
             if ([self getCurrentView]) {
                 
                 float diff_w = (gesture.view.center.x - _cardCenterX) / _cardCenterX;
                 float diff_h = (gesture.view.center.y - _cardCenterY) / _cardCenterY;
                 
-                YSLDraggingDirection direction = YSLDraggingDirectionDefault;
+                YSLDraggableDirection direction = YSLDraggableDirectionDefault;
                 
                 if (fabs(diff_h) > fabs(diff_w)) {
                     
                     if (diff_h <= 0) {
                         // top
-                        if (_canDraggingDirection & YSLDraggingDirectionTop) {
-                            direction = YSLDraggingDirectionTop;
+                        if (_canDraggableDirection & YSLDraggableDirectionUp) {
+                            direction = YSLDraggableDirectionUp;
                         } else {
-                            direction = diff_w <= 0 ? YSLDraggingDirectionLeft : YSLDraggingDirectionRight;
+                            direction = diff_w <= 0 ? YSLDraggableDirectionLeft : YSLDraggableDirectionRight;
                         }
                     } else {
                         // bottom
-                        if (_canDraggingDirection & YSLDraggingDirectionBottom) {
-                            direction = YSLDraggingDirectionBottom;
+                        if (_canDraggableDirection & YSLDraggableDirectionDown) {
+                            direction = YSLDraggableDirectionDown;
                         } else {
-                            direction = diff_w <= 0 ? YSLDraggingDirectionLeft : YSLDraggingDirectionRight;
+                            direction = diff_w <= 0 ? YSLDraggableDirectionLeft : YSLDraggableDirectionRight;
                         }
                     }
                     
                 } else {
                     if (diff_w <= 0) {
                         // left
-                        if (_canDraggingDirection & YSLDraggingDirectionLeft) {
-                            direction = YSLDraggingDirectionLeft;
+                        if (_canDraggableDirection & YSLDraggableDirectionLeft) {
+                            direction = YSLDraggableDirectionLeft;
                         } else {
-                            direction = diff_h <= 0 ? YSLDraggingDirectionTop : YSLDraggingDirectionBottom;
+                            direction = diff_h <= 0 ? YSLDraggableDirectionUp : YSLDraggableDirectionDown;
                         }
                     } else {
                         // right
-                        if (_canDraggingDirection & YSLDraggingDirectionRight) {
-                            direction = YSLDraggingDirectionRight;
+                        if (_canDraggableDirection & YSLDraggableDirectionRight) {
+                            direction = YSLDraggableDirectionRight;
                         } else {
-                            direction = diff_h <= 0 ? YSLDraggingDirectionTop : YSLDraggingDirectionBottom;
+                            direction = diff_h <= 0 ? YSLDraggableDirectionUp : YSLDraggableDirectionDown;
                         }
                     }
                     
                 }
                 
-                [self.delegate cardContainderView:self updatePositionWithDraggingView:gesture.view
-                                draggingDirection:direction
+                [self.delegate cardContainderView:self updatePositionWithDraggableView:gesture.view
+                                draggableDirection:direction
                                         widthDiff:fabs(diff_w) heightDiff:fabsf(diff_h)];
             }
         }
@@ -442,36 +442,36 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
         float diff_w = (gesture.view.center.x - _cardCenterX) / _cardCenterX;
         float diff_h = (gesture.view.center.y - _cardCenterY) / _cardCenterY;
         
-        YSLDraggingDirection direction = YSLDraggingDirectionDefault;
+        YSLDraggableDirection direction = YSLDraggableDirectionDefault;
         if (fabs(diff_h) > fabs(diff_w)) {
-            if (diff_h < - kDragCompleteCoefficient_height_default && (_canDraggingDirection & YSLDraggingDirectionTop)) {
+            if (diff_h < - kDragCompleteCoefficient_height_default && (_canDraggableDirection & YSLDraggableDirectionUp)) {
                 // top
-                direction = YSLDraggingDirectionTop;
+                direction = YSLDraggableDirectionUp;
             }
             
-            if (diff_h > kDragCompleteCoefficient_height_default && (_canDraggingDirection & YSLDraggingDirectionBottom)) {
+            if (diff_h > kDragCompleteCoefficient_height_default && (_canDraggableDirection & YSLDraggableDirectionDown)) {
                 // bottom
-                direction = YSLDraggingDirectionBottom;
+                direction = YSLDraggableDirectionDown;
             }
             
         } else {
             
-            if (diff_w > kDragCompleteCoefficient_width_default && (_canDraggingDirection & YSLDraggingDirectionRight)) {
+            if (diff_w > kDragCompleteCoefficient_width_default && (_canDraggableDirection & YSLDraggableDirectionRight)) {
                 // Right
-                direction = YSLDraggingDirectionRight;
+                direction = YSLDraggableDirectionRight;
             }
             
-            if (diff_w < - kDragCompleteCoefficient_width_default && (_canDraggingDirection & YSLDraggingDirectionLeft)) {
+            if (diff_w < - kDragCompleteCoefficient_width_default && (_canDraggableDirection & YSLDraggableDirectionLeft)) {
                 // Left
-                direction = YSLDraggingDirectionLeft;
+                direction = YSLDraggableDirectionLeft;
             }
         }
         
-        if (direction == YSLDraggingDirectionDefault) {
-            [self cardViewDirectionAnimation:YSLDraggingDirectionDefault isAutomatic:NO resetHandler:nil];
+        if (direction == YSLDraggableDirectionDefault) {
+            [self cardViewDirectionAnimation:YSLDraggableDirectionDefault isAutomatic:NO resetHandler:nil];
         } else {
-            if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainerView:didEndDraggingAtIndex:draggingView:draggingDirection:)]) {
-                [self.delegate cardContainerView:self didEndDraggingAtIndex:_currentIndex draggingView:gesture.view draggingDirection:direction];
+            if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainerView:didEndDraggingAtIndex:draggableView:draggableDirection:)]) {
+                [self.delegate cardContainerView:self didEndDraggingAtIndex:_currentIndex draggableView:gesture.view draggableDirection:direction];
             }
         }
     }
@@ -482,8 +482,8 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
     if (!_currentViews || _currentViews.count == 0) {
         return;
     }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainerView:didSelectAtIndex:draggingView:)]) {
-        [self.delegate cardContainerView:self didSelectAtIndex:_currentIndex draggingView:gesture.view];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainerView:didSelectAtIndex:draggableView:)]) {
+        [self.delegate cardContainerView:self didSelectAtIndex:_currentIndex draggableView:gesture.view];
     }
 }
 

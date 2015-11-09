@@ -14,7 +14,7 @@
 		D04A74501BEFAD8B002F1D85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D04A744F1BEFAD8B002F1D85 /* Assets.xcassets */; };
 		D04A74531BEFAD8B002F1D85 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D04A74511BEFAD8B002F1D85 /* LaunchScreen.storyboard */; };
 		D04A745F1BEFADBE002F1D85 /* YSLCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = D04A745C1BEFADBE002F1D85 /* YSLCardView.m */; };
-		D04A74601BEFADBE002F1D85 /* YSLDraggingCardContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = D04A745E1BEFADBE002F1D85 /* YSLDraggingCardContainer.m */; };
+		D04A74601BEFADBE002F1D85 /* YSLDraggableCardContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = D04A745E1BEFADBE002F1D85 /* YSLDraggableCardContainer.m */; };
 		D04A74631BEFAE85002F1D85 /* CardView.m in Sources */ = {isa = PBXBuildFile; fileRef = D04A74621BEFAE85002F1D85 /* CardView.m */; };
 		D04A746C1BEFAF4B002F1D85 /* photo_sample_01.png in Resources */ = {isa = PBXBuildFile; fileRef = D04A74651BEFAF4B002F1D85 /* photo_sample_01.png */; };
 		D04A746D1BEFAF4B002F1D85 /* photo_sample_02.png in Resources */ = {isa = PBXBuildFile; fileRef = D04A74661BEFAF4B002F1D85 /* photo_sample_02.png */; };
@@ -38,8 +38,8 @@
 		D04A74541BEFAD8B002F1D85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D04A745B1BEFADBE002F1D85 /* YSLCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YSLCardView.h; sourceTree = "<group>"; };
 		D04A745C1BEFADBE002F1D85 /* YSLCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YSLCardView.m; sourceTree = "<group>"; };
-		D04A745D1BEFADBE002F1D85 /* YSLDraggingCardContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YSLDraggingCardContainer.h; sourceTree = "<group>"; };
-		D04A745E1BEFADBE002F1D85 /* YSLDraggingCardContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YSLDraggingCardContainer.m; sourceTree = "<group>"; };
+		D04A745D1BEFADBE002F1D85 /* YSLDraggableCardContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YSLDraggableCardContainer.h; sourceTree = "<group>"; };
+		D04A745E1BEFADBE002F1D85 /* YSLDraggableCardContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YSLDraggableCardContainer.m; sourceTree = "<group>"; };
 		D04A74611BEFAE85002F1D85 /* CardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardView.h; sourceTree = "<group>"; };
 		D04A74621BEFAE85002F1D85 /* CardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardView.m; sourceTree = "<group>"; };
 		D04A74651BEFAF4B002F1D85 /* photo_sample_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_sample_01.png; sourceTree = "<group>"; };
@@ -111,8 +111,8 @@
 			children = (
 				D04A745B1BEFADBE002F1D85 /* YSLCardView.h */,
 				D04A745C1BEFADBE002F1D85 /* YSLCardView.m */,
-				D04A745D1BEFADBE002F1D85 /* YSLDraggingCardContainer.h */,
-				D04A745E1BEFADBE002F1D85 /* YSLDraggingCardContainer.m */,
+				D04A745D1BEFADBE002F1D85 /* YSLDraggableCardContainer.h */,
+				D04A745E1BEFADBE002F1D85 /* YSLDraggableCardContainer.m */,
 			);
 			path = YSLDraggingCardContainer;
 			sourceTree = SOURCE_ROOT;
@@ -209,7 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D04A74631BEFAE85002F1D85 /* CardView.m in Sources */,
-				D04A74601BEFADBE002F1D85 /* YSLDraggingCardContainer.m in Sources */,
+				D04A74601BEFADBE002F1D85 /* YSLDraggableCardContainer.m in Sources */,
 				D04A744B1BEFAD8B002F1D85 /* ViewController.m in Sources */,
 				D04A745F1BEFADBE002F1D85 /* YSLCardView.m in Sources */,
 				D04A74481BEFAD8B002F1D85 /* AppDelegate.m in Sources */,
