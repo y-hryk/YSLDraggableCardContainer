@@ -24,6 +24,8 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
 
 @property (nonatomic, assign) MoveSlope moveSlope;
 @property (nonatomic, assign) CGRect defaultFrame;
+@property (nonatomic, assign) CGFloat cardCenterX;
+@property (nonatomic, assign) CGFloat cardCenterY;
 @property (nonatomic, assign) NSInteger loadedIndex;
 @property (nonatomic, assign) NSInteger currentIndex;
 @property (nonatomic, strong) NSMutableArray *currentViews;
@@ -56,7 +58,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
 
 #pragma mark -- Public
 
--(void)reloadContainerView
+-(void)reloadCardContainer
 {
     for (UIView *view in self.subviews) {
         [view removeFromSuperview];
@@ -109,6 +111,8 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
                     UIView *view = [self.dataSource cardContainerViewNextViewWithIndex:_loadedIndex];
                     if (view) {
                         _defaultFrame = view.frame;
+                        _cardCenterX = view.center.x;
+                        _cardCenterY = view.center.y;
                         
                         [self addSubview:view];
                         [self sendSubviewToBack:view];
@@ -241,8 +245,8 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
 {
     UIView *view = [self getCurrentView];
     
-    float diff_w = fabs((view.center.x - (self.frame.size.width / 2)) / (self.frame.size.width / 2));
-    float diff_h = fabs((view.center.y - (self.frame.size.height / 2)) / (self.frame.size.height / 2));
+    float diff_w = fabs((view.center.x - _cardCenterX) / _cardCenterX);
+    float diff_h = fabs((view.center.y - _cardCenterY) / _cardCenterY);
     float diff = diff_w > diff_h ? diff_w : diff_h;
     
     if (_currentViews.count == 2) {
@@ -356,9 +360,11 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gesture
 {
+    if (!_isInitialAnimation) { return; }
+    
     if (gesture.state == UIGestureRecognizerStateBegan) {
         CGPoint touchPoint = [gesture locationInView:self];
-        if (touchPoint.y <= self.frame.size.height / 2) {
+        if (touchPoint.y <= _cardCenterY) {
             _moveSlope = MoveSlopeTop;
         } else {
             _moveSlope = MoveSlopeBottom;
@@ -372,15 +378,15 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
         gesture.view.center = movedPoint;
         
         [gesture.view setTransform:
-         CGAffineTransformMakeRotation((gesture.view.center.x - (self.frame.size.width / 2)) / (self.frame.size.width / 2) * (_moveSlope * (M_PI/20)))];
+         CGAffineTransformMakeRotation((gesture.view.center.x - _cardCenterX) / _cardCenterX * (_moveSlope * (M_PI / 20)))];
         
         [self cardViewUpDateScale];
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainderView:updatePositionWithDraggingView:draggingDirection:widthDiff:heightDiff:)]) {
             if ([self getCurrentView]) {
                 
-                float diff_w = (gesture.view.center.x - (self.frame.size.width / 2)) / (self.frame.size.width / 2);
-                float diff_h = (gesture.view.center.y - (self.frame.size.height / 2)) / (self.frame.size.height / 2);
+                float diff_w = (gesture.view.center.x - _cardCenterX) / _cardCenterX;
+                float diff_h = (gesture.view.center.y - _cardCenterY) / _cardCenterY;
                 
                 YSLDraggingDirection direction = YSLDraggingDirectionDefault;
                 
@@ -433,8 +439,8 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
     if (gesture.state == UIGestureRecognizerStateEnded ||
         gesture.state == UIGestureRecognizerStateCancelled) {
         
-        float diff_w = (gesture.view.center.x - (self.frame.size.width / 2)) / (self.frame.size.width / 2);
-        float diff_h = (gesture.view.center.y - (self.frame.size.height / 2)) / (self.frame.size.height / 2);
+        float diff_w = (gesture.view.center.x - _cardCenterX) / _cardCenterX;
+        float diff_h = (gesture.view.center.y - _cardCenterY) / _cardCenterY;
         
         YSLDraggingDirection direction = YSLDraggingDirectionDefault;
         if (fabs(diff_h) > fabs(diff_w)) {
@@ -468,7 +474,6 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
                 [self.delegate cardContainerView:self didEndDraggingAtIndex:_currentIndex draggingView:gesture.view draggingDirection:direction];
             }
         }
-        
     }
 }
 

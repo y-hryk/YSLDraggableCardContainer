@@ -47,14 +47,17 @@ typedef NS_OPTIONS(NSInteger, YSLDraggingDirection) {
 @interface YSLDraggingCardContainer : UIView
 
 /**
- *  Default YSLDraggingDirectionLeft | YSLDraggingDirectionRight
+ *  default is YSLDraggingDirectionLeft | YSLDraggingDirectionRight
  */
 @property (nonatomic, assign) YSLDraggingDirection canDraggingDirection;
 @property (nonatomic, weak) id <YSLDraggingCardContainerDataSource> dataSource;
 @property (nonatomic, weak) id <YSLDraggingCardContainerDelegate> delegate;
 
+/**
+ *  reloads everything from scratch. redisplays card.
+ */
+- (void)reloadCardContainer;
 
-- (void)reloadContainerView;
 - (void)movePositionWithDirection:(YSLDraggingDirection)direction isAutomatic:(BOOL)isAutomatic;
 - (void)movePositionWithDirection:(YSLDraggingDirection)direction isAutomatic:(BOOL)isAutomatic resetHandler:(void (^)())resetHandler;
 
