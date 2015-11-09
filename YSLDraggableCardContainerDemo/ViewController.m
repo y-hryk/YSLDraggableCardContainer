@@ -76,7 +76,7 @@
     
     for (int i = 0; i < 7; i++) {
         NSDictionary *dict = @{@"image" : [NSString stringWithFormat:@"photo_sample_0%d",i + 1],
-                               @"name" : @"YSLDraggingCardContainer Demo"};
+                               @"name" : @"YSLDraggableCardContainer Demo"};
         [_datas addObject:dict];
     }
 }
