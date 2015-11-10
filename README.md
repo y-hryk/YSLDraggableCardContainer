@@ -59,7 +59,7 @@ iOS 7.0
     [_container reloadCardContainer];
 }
 
-#pragma mark -- YSLSwipeingViewContainer DataSource
+#pragma mark -- YSLDraggableCardContainer DataSource
 - (UIView *)cardContainerViewNextViewWithIndex:(NSInteger)index
 {
     NSDictionary *dict = _datas[index];
@@ -75,7 +75,7 @@ iOS 7.0
     return _datas.count;
 }
 
-#pragma mark -- YSLSwipeingViewContainer Delegate
+#pragma mark -- YSLDraggableCardContainer Delegate
 - (void)cardContainerView:(YSLDraggableCardContainer *)cardContainerView didEndDraggingAtIndex:(NSInteger)index draggableView:(UIView *)draggableView draggableDirection:(YSLDraggableDirection)draggableDirection
 {
     if (draggableDirection == YSLDraggableDirectionLeft) {
@@ -118,12 +118,12 @@ iOS 7.0
     NSLog(@"++ Tap card index : %ld",(long)index);
 }
 ```
-#### Undo Animation
+#### Undo
 ``` objective-c
 - (void)buttonTap:(UIButton *)button
 {
     __weak ViewController *weakself = self;
-    [_container movePositionWithDirection:YSLDraggableDirectionDown isAutomatic:YES resetHandler:^{
+    [_container movePositionWithDirection:YSLDraggableDirectionDown isAutomatic:YES undoHandler:^{
        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@""
                                                                                 message:@"Do you want to reset?"
                                                                          preferredStyle:UIAlertControllerStyleAlert];
@@ -135,12 +135,10 @@ iOS 7.0
        [alertController addAction:[UIAlertAction actionWithTitle:@"YES" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             [weakself.container movePositionWithDirection:YSLDraggableDirectionDefault isAutomatic:YES];
        }]];
-            
             [self presentViewController:alertController animated:YES completion:nil];
     }];
 }
 
 ```
-
 ## Licence
 MIT
