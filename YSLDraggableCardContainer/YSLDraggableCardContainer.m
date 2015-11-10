@@ -93,7 +93,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(cardContainerViewNumberOfViewInIndex:)]) {
         NSInteger index = [self.dataSource cardContainerViewNumberOfViewInIndex:_loadedIndex];
         
-        // all cardViews Draggable end
+        // all cardViews Dragging end
         if (index == _currentIndex) {
             if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainerViewDidCompleteAll:)]) {
                 [self.delegate cardContainerViewDidCompleteAll:self];
@@ -393,14 +393,14 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
                 if (fabs(diff_h) > fabs(diff_w)) {
                     
                     if (diff_h <= 0) {
-                        // top
+                        // up
                         if (_canDraggableDirection & YSLDraggableDirectionUp) {
                             direction = YSLDraggableDirectionUp;
                         } else {
                             direction = diff_w <= 0 ? YSLDraggableDirectionLeft : YSLDraggableDirectionRight;
                         }
                     } else {
-                        // bottom
+                        // down
                         if (_canDraggableDirection & YSLDraggableDirectionDown) {
                             direction = YSLDraggableDirectionDown;
                         } else {
@@ -445,24 +445,24 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
         YSLDraggableDirection direction = YSLDraggableDirectionDefault;
         if (fabs(diff_h) > fabs(diff_w)) {
             if (diff_h < - kDragCompleteCoefficient_height_default && (_canDraggableDirection & YSLDraggableDirectionUp)) {
-                // top
+                // up
                 direction = YSLDraggableDirectionUp;
             }
             
             if (diff_h > kDragCompleteCoefficient_height_default && (_canDraggableDirection & YSLDraggableDirectionDown)) {
-                // bottom
+                // down
                 direction = YSLDraggableDirectionDown;
             }
             
         } else {
             
             if (diff_w > kDragCompleteCoefficient_width_default && (_canDraggableDirection & YSLDraggableDirectionRight)) {
-                // Right
+                // right
                 direction = YSLDraggableDirectionRight;
             }
             
             if (diff_w < - kDragCompleteCoefficient_width_default && (_canDraggableDirection & YSLDraggableDirectionLeft)) {
-                // Left
+                // left
                 direction = YSLDraggableDirectionLeft;
             }
         }
