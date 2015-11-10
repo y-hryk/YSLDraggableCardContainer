@@ -40,8 +40,6 @@
     _container.canDraggableDirection = YSLDraggableDirectionLeft | YSLDraggableDirectionRight | YSLDraggableDirectionUp;
     [self.view addSubview:_container];
     
-    [_container reloadCardContainer];
-    
     for (int i = 0; i < 4; i++) {
         
         UIView *view = [[UIView alloc]init];
@@ -68,6 +66,8 @@
     }
     
     [self loadData];
+    
+    [_container reloadCardContainer];
 }
 
 - (void)loadData
@@ -89,7 +89,7 @@
     }
     if (button.tag == 1) {
         __weak ViewController *weakself = self;
-        [_container movePositionWithDirection:YSLDraggableDirectionDown isAutomatic:YES resetHandler:^{
+        [_container movePositionWithDirection:YSLDraggableDirectionDown isAutomatic:YES undoHandler:^{
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@""
                                                                                      message:@"Do you want to reset?"
                                                                               preferredStyle:UIAlertControllerStyleAlert];
@@ -114,7 +114,7 @@
     }
 }
 
-#pragma mark -- YSLSwipeingViewContainer DataSource
+#pragma mark -- YSLDraggableCardContainer DataSource
 - (UIView *)cardContainerViewNextViewWithIndex:(NSInteger)index
 {
     NSDictionary *dict = _datas[index];
@@ -130,8 +130,7 @@
     return _datas.count;
 }
 
-#pragma mark -- YSLSwipeingViewContainer Delegate
-
+#pragma mark -- YSLDraggableCardContainer Delegate
 - (void)cardContainerView:(YSLDraggableCardContainer *)cardContainerView didEndDraggingAtIndex:(NSInteger)index draggableView:(UIView *)draggableView draggableDirection:(YSLDraggableDirection)draggableDirection
 {
     if (draggableDirection == YSLDraggableDirectionLeft) {

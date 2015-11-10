@@ -59,7 +59,7 @@ typedef NS_OPTIONS(NSInteger, YSLDraggableDirection) {
 - (void)reloadCardContainer;
 
 - (void)movePositionWithDirection:(YSLDraggableDirection)direction isAutomatic:(BOOL)isAutomatic;
-- (void)movePositionWithDirection:(YSLDraggableDirection)direction isAutomatic:(BOOL)isAutomatic resetHandler:(void (^)())resetHandler;
+- (void)movePositionWithDirection:(YSLDraggableDirection)direction isAutomatic:(BOOL)isAutomatic undoHandler:(void (^)())undoHandler;
 
 - (UIView *)getCurrentView;
 

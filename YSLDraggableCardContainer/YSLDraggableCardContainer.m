@@ -71,14 +71,14 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
     [self viewInitialAnimation];
 }
 
-- (void)movePositionWithDirection:(YSLDraggableDirection)direction isAutomatic:(BOOL)isAutomatic resetHandler:(void (^)())resetHandler
+- (void)movePositionWithDirection:(YSLDraggableDirection)direction isAutomatic:(BOOL)isAutomatic undoHandler:(void (^)())undoHandler
 {
-    [self cardViewDirectionAnimation:direction isAutomatic:isAutomatic resetHandler:resetHandler];
+    [self cardViewDirectionAnimation:direction isAutomatic:isAutomatic undoHandler:undoHandler];
 }
 
 - (void)movePositionWithDirection:(YSLDraggableDirection)direction isAutomatic:(BOOL)isAutomatic
 {
-    [self cardViewDirectionAnimation:direction isAutomatic:isAutomatic resetHandler:nil];
+    [self cardViewDirectionAnimation:direction isAutomatic:isAutomatic undoHandler:nil];
 }
 
 - (UIView *)getCurrentView
@@ -141,7 +141,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
         }
     }
 }
-- (void)cardViewDirectionAnimation:(YSLDraggableDirection)direction isAutomatic:(BOOL)isAutomatic resetHandler:(void (^)())resetHandler
+- (void)cardViewDirectionAnimation:(YSLDraggableDirection)direction isAutomatic:(BOOL)isAutomatic undoHandler:(void (^)())undoHandler
 {
     if (!_isInitialAnimation) { return; }
     UIView *view = [self getCurrentView];
@@ -165,7 +165,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
         return;
     }
     
-    if (!resetHandler) {
+    if (!undoHandler) {
         [_currentViews removeObject:view];
         _currentIndex++;
         [self loadNextView];
@@ -198,14 +198,14 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
                                  view.center = CGPointMake(view.center.x, (weakself.frame.size.height * 1.5));
                              }
                              
-                             if (!resetHandler) {
+                             if (!undoHandler) {
                                  [weakself cardViewDefaultScale];
                              }
                          } completion:^(BOOL finished) {
-                             if (!resetHandler) {
+                             if (!undoHandler) {
                                  [view removeFromSuperview];
                              } else  {
-                                 if (resetHandler) { resetHandler(); }
+                                 if (undoHandler) { undoHandler(); }
                              }
                          }];
     }
@@ -231,10 +231,10 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
                                                   view.center = CGPointMake(view.center.x, -1 * ((weakself.frame.size.height) / 2));
                                                   [weakself cardViewDefaultScale];
                                               } completion:^(BOOL finished) {
-                                                  if (!resetHandler) {
+                                                  if (!undoHandler) {
                                                       [view removeFromSuperview];
                                                   } else  {
-                                                      if (resetHandler) { resetHandler(); }
+                                                      if (undoHandler) { undoHandler(); }
                                                   }
                                               }];
                          }];
@@ -468,7 +468,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
         }
         
         if (direction == YSLDraggableDirectionDefault) {
-            [self cardViewDirectionAnimation:YSLDraggableDirectionDefault isAutomatic:NO resetHandler:nil];
+            [self cardViewDirectionAnimation:YSLDraggableDirectionDefault isAutomatic:NO undoHandler:nil];
         } else {
             if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainerView:didEndDraggingAtIndex:draggableView:draggableDirection:)]) {
                 [self.delegate cardContainerView:self didEndDraggingAtIndex:_currentIndex draggableView:gesture.view draggableDirection:direction];
