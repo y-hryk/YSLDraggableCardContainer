@@ -9,7 +9,7 @@
 ## Requirement
 not support landscape
 
-iOS 7.0
+iOS 7.0 or later
 ## Install
 #### Manually
  Copy YSLDraggableCardContainer directory to your project.
@@ -142,3 +142,8 @@ iOS 7.0
 ```
 ## Licence
 MIT
+
+## Other Library
+- [YSLContainerViewController](https://github.com/y-hryk/YSLContainerViewController)
+- [YSLTransitionAnimator](https://github.com/y-hryk/YSLTransitionAnimator)
+- [YSLGoogleSuggestView](https://github.com/y-hryk/YSLGoogleSuggestView)
