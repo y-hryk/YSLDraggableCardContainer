@@ -52,17 +52,17 @@
         button.frame = CGRectMake(10, 10, size - 20, size - 20);
         [button setBackgroundColor:RGB(66, 172, 225)];
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        button.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:40];
+        button.titleLabel.font = [UIFont fontWithName:@"Futura-Medium" size:18];
         button.clipsToBounds = YES;
         button.layer.cornerRadius = button.frame.size.width / 2;
         button.tag = i;
         [button addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
         [view addSubview:button];
         
-        if (i == 0) { [button setTitle:@"U" forState:UIControlStateNormal]; }
-        if (i == 1) { [button setTitle:@"D" forState:UIControlStateNormal]; }
-        if (i == 2) { [button setTitle:@"L" forState:UIControlStateNormal]; }
-        if (i == 3) { [button setTitle:@"R" forState:UIControlStateNormal]; }
+        if (i == 0) { [button setTitle:@"Up" forState:UIControlStateNormal]; }
+        if (i == 1) { [button setTitle:@"Down" forState:UIControlStateNormal]; }
+        if (i == 2) { [button setTitle:@"Left" forState:UIControlStateNormal]; }
+        if (i == 3) { [button setTitle:@"Right" forState:UIControlStateNormal]; }
     }
     
     [self loadData];
