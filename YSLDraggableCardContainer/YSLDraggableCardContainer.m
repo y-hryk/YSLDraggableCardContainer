@@ -245,31 +245,31 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
 {
     UIView *view = [self getCurrentView];
     
-    float diff_w = fabs((view.center.x - _cardCenterX) / _cardCenterX);
-    float diff_h = fabs((view.center.y - _cardCenterY) / _cardCenterY);
-    float diff = diff_w > diff_h ? diff_w : diff_h;
+    float ratio_w = fabs((view.center.x - _cardCenterX) / _cardCenterX);
+    float ratio_h = fabs((view.center.y - _cardCenterY) / _cardCenterY);
+    float ratio = ratio_w > ratio_h ? ratio_w : ratio_h;
     
     if (_currentViews.count == 2) {
-        if (diff <= 1) {
+        if (ratio <= 1) {
             UIView *view = _currentViews[1];
             view.transform = CGAffineTransformIdentity;
-            view.frame = CGRectMake(_defaultFrame.origin.x, _defaultFrame.origin.y + (kCard_Margin - (diff * kCard_Margin)), _defaultFrame.size.width, _defaultFrame.size.height);
-            view.transform = CGAffineTransformScale(CGAffineTransformIdentity,kSecondCard_Scale + (diff * (1 - kSecondCard_Scale)),kSecondCard_Scale + (diff * (1 - kSecondCard_Scale)));
+            view.frame = CGRectMake(_defaultFrame.origin.x, _defaultFrame.origin.y + (kCard_Margin - (ratio * kCard_Margin)), _defaultFrame.size.width, _defaultFrame.size.height);
+            view.transform = CGAffineTransformScale(CGAffineTransformIdentity,kSecondCard_Scale + (ratio * (1 - kSecondCard_Scale)),kSecondCard_Scale + (ratio * (1 - kSecondCard_Scale)));
         }
     }
     if (_currentViews.count == 3) {
-        if (diff <= 1) {
+        if (ratio <= 1) {
             {
                 UIView *view = _currentViews[1];
                 view.transform = CGAffineTransformIdentity;
-                view.frame = CGRectMake(_defaultFrame.origin.x, _defaultFrame.origin.y + (kCard_Margin - (diff * kCard_Margin)), _defaultFrame.size.width, _defaultFrame.size.height);
-                view.transform = CGAffineTransformScale(CGAffineTransformIdentity,kSecondCard_Scale + (diff * (1 - kSecondCard_Scale)),kSecondCard_Scale + (diff * (1 - kSecondCard_Scale)));
+                view.frame = CGRectMake(_defaultFrame.origin.x, _defaultFrame.origin.y + (kCard_Margin - (ratio * kCard_Margin)), _defaultFrame.size.width, _defaultFrame.size.height);
+                view.transform = CGAffineTransformScale(CGAffineTransformIdentity,kSecondCard_Scale + (ratio * (1 - kSecondCard_Scale)),kSecondCard_Scale + (ratio * (1 - kSecondCard_Scale)));
             }
             {
                 UIView *view = _currentViews[2];
                 view.transform = CGAffineTransformIdentity;
-                view.frame = CGRectMake(_defaultFrame.origin.x, _defaultFrame.origin.y + ((kCard_Margin * 2) - (diff * kCard_Margin)), _defaultFrame.size.width, _defaultFrame.size.height);
-                view.transform = CGAffineTransformScale(CGAffineTransformIdentity,kTherdCard_Scale + (diff * (kSecondCard_Scale - kTherdCard_Scale)),kTherdCard_Scale + (diff * (kSecondCard_Scale - kTherdCard_Scale)));
+                view.frame = CGRectMake(_defaultFrame.origin.x, _defaultFrame.origin.y + ((kCard_Margin * 2) - (ratio * kCard_Margin)), _defaultFrame.size.width, _defaultFrame.size.height);
+                view.transform = CGAffineTransformScale(CGAffineTransformIdentity,kTherdCard_Scale + (ratio * (kSecondCard_Scale - kTherdCard_Scale)),kTherdCard_Scale + (ratio * (kSecondCard_Scale - kTherdCard_Scale)));
             }
         }
     }
@@ -277,11 +277,11 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
 
 - (void)cardViewDefaultScale
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainderView:updatePositionWithDraggableView:draggableDirection:widthDiff:heightDiff:)]) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainderView:updatePositionWithDraggableView:draggableDirection:widthRatio:heightRatio:)]) {
         
         [self.delegate cardContainderView:self updatePositionWithDraggableView:[self getCurrentView]
                         draggableDirection:YSLDraggableDirectionDefault
-                                widthDiff:0 heightDiff:0];
+                                widthRatio:0 heightRatio:0];
     }
 
     for (int i = 0; i < _currentViews.count; i++) {
@@ -382,46 +382,46 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
         
         [self cardViewUpDateScale];
         
-        if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainderView:updatePositionWithDraggableView:draggableDirection:widthDiff:heightDiff:)]) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainderView:updatePositionWithDraggableView:draggableDirection:widthRatio:heightRatio:)]) {
             if ([self getCurrentView]) {
                 
-                float diff_w = (gesture.view.center.x - _cardCenterX) / _cardCenterX;
-                float diff_h = (gesture.view.center.y - _cardCenterY) / _cardCenterY;
+                float ratio_w = (gesture.view.center.x - _cardCenterX) / _cardCenterX;
+                float ratio_h = (gesture.view.center.y - _cardCenterY) / _cardCenterY;
                 
                 YSLDraggableDirection direction = YSLDraggableDirectionDefault;
                 
-                if (fabs(diff_h) > fabs(diff_w)) {
+                if (fabs(ratio_h) > fabs(ratio_w)) {
                     
-                    if (diff_h <= 0) {
+                    if (ratio_h <= 0) {
                         // up
                         if (_canDraggableDirection & YSLDraggableDirectionUp) {
                             direction = YSLDraggableDirectionUp;
                         } else {
-                            direction = diff_w <= 0 ? YSLDraggableDirectionLeft : YSLDraggableDirectionRight;
+                            direction = ratio_w <= 0 ? YSLDraggableDirectionLeft : YSLDraggableDirectionRight;
                         }
                     } else {
                         // down
                         if (_canDraggableDirection & YSLDraggableDirectionDown) {
                             direction = YSLDraggableDirectionDown;
                         } else {
-                            direction = diff_w <= 0 ? YSLDraggableDirectionLeft : YSLDraggableDirectionRight;
+                            direction = ratio_w <= 0 ? YSLDraggableDirectionLeft : YSLDraggableDirectionRight;
                         }
                     }
                     
                 } else {
-                    if (diff_w <= 0) {
+                    if (ratio_w <= 0) {
                         // left
                         if (_canDraggableDirection & YSLDraggableDirectionLeft) {
                             direction = YSLDraggableDirectionLeft;
                         } else {
-                            direction = diff_h <= 0 ? YSLDraggableDirectionUp : YSLDraggableDirectionDown;
+                            direction = ratio_h <= 0 ? YSLDraggableDirectionUp : YSLDraggableDirectionDown;
                         }
                     } else {
                         // right
                         if (_canDraggableDirection & YSLDraggableDirectionRight) {
                             direction = YSLDraggableDirectionRight;
                         } else {
-                            direction = diff_h <= 0 ? YSLDraggableDirectionUp : YSLDraggableDirectionDown;
+                            direction = ratio_h <= 0 ? YSLDraggableDirectionUp : YSLDraggableDirectionDown;
                         }
                     }
                     
@@ -429,7 +429,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
                 
                 [self.delegate cardContainderView:self updatePositionWithDraggableView:gesture.view
                                 draggableDirection:direction
-                                        widthDiff:fabs(diff_w) heightDiff:fabsf(diff_h)];
+                                        widthRatio:fabs(ratio_w) heightRatio:fabsf(ratio_h)];
             }
         }
         
@@ -439,29 +439,29 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
     if (gesture.state == UIGestureRecognizerStateEnded ||
         gesture.state == UIGestureRecognizerStateCancelled) {
         
-        float diff_w = (gesture.view.center.x - _cardCenterX) / _cardCenterX;
-        float diff_h = (gesture.view.center.y - _cardCenterY) / _cardCenterY;
+        float ratio_w = (gesture.view.center.x - _cardCenterX) / _cardCenterX;
+        float ratio_h = (gesture.view.center.y - _cardCenterY) / _cardCenterY;
         
         YSLDraggableDirection direction = YSLDraggableDirectionDefault;
-        if (fabs(diff_h) > fabs(diff_w)) {
-            if (diff_h < - kDragCompleteCoefficient_height_default && (_canDraggableDirection & YSLDraggableDirectionUp)) {
+        if (fabs(ratio_h) > fabs(ratio_w)) {
+            if (ratio_h < - kDragCompleteCoefficient_height_default && (_canDraggableDirection & YSLDraggableDirectionUp)) {
                 // up
                 direction = YSLDraggableDirectionUp;
             }
             
-            if (diff_h > kDragCompleteCoefficient_height_default && (_canDraggableDirection & YSLDraggableDirectionDown)) {
+            if (ratio_h > kDragCompleteCoefficient_height_default && (_canDraggableDirection & YSLDraggableDirectionDown)) {
                 // down
                 direction = YSLDraggableDirectionDown;
             }
             
         } else {
             
-            if (diff_w > kDragCompleteCoefficient_width_default && (_canDraggableDirection & YSLDraggableDirectionRight)) {
+            if (ratio_w > kDragCompleteCoefficient_width_default && (_canDraggableDirection & YSLDraggableDirectionRight)) {
                 // right
                 direction = YSLDraggableDirectionRight;
             }
             
-            if (diff_w < - kDragCompleteCoefficient_width_default && (_canDraggableDirection & YSLDraggableDirectionLeft)) {
+            if (ratio_w < - kDragCompleteCoefficient_width_default && (_canDraggableDirection & YSLDraggableDirectionLeft)) {
                 // left
                 direction = YSLDraggableDirectionLeft;
             }

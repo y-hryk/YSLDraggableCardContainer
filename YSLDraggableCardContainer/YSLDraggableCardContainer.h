@@ -40,7 +40,7 @@ typedef NS_OPTIONS(NSInteger, YSLDraggableDirection) {
          didSelectAtIndex:(NSInteger)index
              draggableView:(UIView *)draggableView;
 
-- (void)cardContainderView:(YSLDraggableCardContainer *)cardContainderView updatePositionWithDraggableView:(UIView *)draggableView draggableDirection:(YSLDraggableDirection)draggableDirection widthDiff:(CGFloat)widthDiff heightDiff:(CGFloat)heightDiff;
+- (void)cardContainderView:(YSLDraggableCardContainer *)cardContainderView updatePositionWithDraggableView:(UIView *)draggableView draggableDirection:(YSLDraggableDirection)draggableDirection widthRatio:(CGFloat)widthRatio heightRatio:(CGFloat)heightRatio;
 
 @end
 
