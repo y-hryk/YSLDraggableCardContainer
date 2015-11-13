@@ -46,7 +46,7 @@ iOS 7.0 or later
     _container.backgroundColor = [UIColor clearColor];
     _container.dataSource = self;
     _container.delegate = self;
-    _container.canDraggableDirection = YSLDraggableDirectionLeft | YSLDraggableDirectionRight | YSLDraggableDirectionUp;
+    _container.canDraggableDirection = YSLDraggableDirectionLeft | YSLDraggableDirectionRight;
     [self.view addSubview:_container];
     
     _datas = [NSMutableArray array];
@@ -89,7 +89,7 @@ iOS 7.0 or later
     }
 }
 
-- (void)cardContainderView:(YSLDraggableCardContainer *)cardContainderView updatePositionWithDraggableView:(UIView *)draggableView draggableDirection:(YSLDraggableDirection)draggableDirection widthDiff:(CGFloat)widthDiff heightDiff:(CGFloat)heightDiff
+- (void)cardContainderView:(YSLDraggableCardContainer *)cardContainderView updatePositionWithDraggableView:(UIView *)draggableView draggableDirection:(YSLDraggableDirection)draggableDirection widthRatio:(CGFloat)widthRatio heightRatio:(CGFloat)heightRatio
 {
     CardView *view = (CardView *)draggableView;
     
@@ -99,12 +99,12 @@ iOS 7.0 or later
     
     if (draggableDirection == YSLDraggableDirectionLeft) {
         view.selectedView.backgroundColor = RGB(215, 104, 91);
-        view.selectedView.alpha = widthDiff > 0.8 ? 0.8 : widthDiff;
+        view.selectedView.alpha = widthRatio > 0.8 ? 0.8 : widthRatio;
     }
     
     if (draggableDirection == YSLDraggableDirectionRight) {
         view.selectedView.backgroundColor = RGB(114, 209, 142);
-        view.selectedView.alpha = widthDiff > 0.8 ? 0.8 : widthDiff;
+        view.selectedView.alpha = widthRatio > 0.8 ? 0.8 : widthRatio;
     }
 }
 
