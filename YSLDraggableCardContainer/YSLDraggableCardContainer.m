@@ -94,7 +94,7 @@ typedef NS_ENUM(NSInteger, MoveSlope) {
         NSInteger index = [self.dataSource cardContainerViewNumberOfViewInIndex:_loadedIndex];
         
         // all cardViews Dragging end
-        if (index == _currentIndex) {
+        if (index != 0 && index == _currentIndex) {
             if (self.delegate && [self.delegate respondsToSelector:@selector(cardContainerViewDidCompleteAll:)]) {
                 [self.delegate cardContainerViewDidCompleteAll:self];
             }
